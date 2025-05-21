@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geburtstagsüberraschung! 🎉</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background: linear-gradient(120deg, #f6d365 0%, #fda085 100%);
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
+        }
+        .center-wrap {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .glass-card {
+            background: rgba(255,255,255,0.85);
+            border-radius: 32px;
+            box-shadow: 0 8px 48px 0 rgba(246,211,101,0.18), 0 2px 0 #fff;
+            padding: 56px 32px 36px 32px;
+            max-width: 420px;
+            width: 92vw;
+            text-align: center;
+            margin: 0 auto;
+            border: 2.5px solid #fffbe9;
+            position: relative;
+            overflow: visible;
+            animation: popIn 1.2s cubic-bezier(.68,-0.55,.27,1.55);
+        }
+        @keyframes popIn {
+            0% { transform: scale(0.7); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .amazing-title {
+            font-size: 2.8rem;
+            font-weight: 900;
+            background: linear-gradient(90deg, #e17055 0%, #f6d365 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 12px #f6d365, 0 1px 0 #fff;
+            margin-bottom: 18px;
+            letter-spacing: 2.5px;
+            animation: glow 2.5s infinite alternate;
+        }
+        @keyframes glow {
+            0% { text-shadow: 0 2px 12px #f6d365, 0 1px 0 #fff; }
+            100% { text-shadow: 0 8px 32px #e17055, 0 2px 4px #fff; }
+        }
+        .balloon-float {
+            position: absolute;
+            left: 50%;
+            top: -80px;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 120px;
+            z-index: 2;
+            animation: floatBalloon 4s ease-in-out infinite alternate;
+        }
+        .balloon-float img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        @keyframes floatBalloon {
+            0% { transform: translateX(-50%) translateY(0); }
+            100% { transform: translateX(-50%) translateY(-40px); }
+        }
+        .cake-emoji-big {
+            font-size: 5rem;
+            margin-bottom: 18px;
+            animation: bounce 1.2s infinite alternate, cakeGlow 2.2s infinite alternate;
+            filter: drop-shadow(0 0 32px #f6d365);
+            position: relative;
+        }
+        @keyframes bounce {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-20px); }
+        }
+        @keyframes cakeGlow {
+            0% { filter: drop-shadow(0 0 32px #f6d365); }
+            100% { filter: drop-shadow(0 0 48px #fdcbf1); }
+        }
+        .amazing-message {
+            font-size: 1.5rem;
+            color: #e17055;
+            min-height: 54px;
+            margin-bottom: 24px;
+            letter-spacing: 0.4px;
+            background: linear-gradient(90deg, #fffbe9 60%, #f6d365 100%);
+            border-radius: 30px;
+            padding: 28px 22px;
+            box-shadow: 0 2px 24px rgba(246,211,101,0.13);
+            border: 0;
+        }
+        .amazing-btn {
+            background: linear-gradient(90deg, #e17055, #f6d365);
+            color: #fff;
+            border: none;
+            border-radius: 30px;
+            padding: 16px 40px;
+            font-size: 1.18rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(246,211,101,0.13);
+            margin-top: 18px;
+            margin-bottom: 0;
+            transition: background 0.3s, transform 0.2s;
+        }
+        .amazing-btn:hover {
+            background: linear-gradient(90deg, #f6d365, #e17055);
+            color: #e17055;
+            transform: scale(1.07);
+        }
+        .signature-amazing {
+            font-family: 'Poppins', cursive, sans-serif;
+            font-size: 1.25rem;
+            color: #e17055;
+            margin-top: 32px;
+            opacity: 0.9;
+            letter-spacing: 1.3px;
+        }
+        .confetti-canvas {
+            position: fixed;
+            left: 0; top: 0; width: 100vw; height: 100vh;
+            pointer-events: none;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+    <canvas class="confetti-canvas" id="confettiCanvas"></canvas>
+    <div class="center-wrap">
+        <div class="glass-card">
+            <div class="balloon-float"><img src="https://cdn.pixabay.com/photo/2013/07/12/13/57/balloon-147622_1280.png" alt="Balloon"></div>
+            <div class="amazing-title">Das ist <span style="color:#f6d365;">AMAZING!</span></div>
+            <div class="cake-emoji-big">🎂</div>
+            <div class="amazing-message" id="amazingMessage"></div>
+            <button class="amazing-btn" id="playSong">Lass uns feiern! 🎵</button>
+            <audio id="birthdayAudio" src="https://cdn.pixabay.com/audio/2022/07/26/audio_124bfae5b2.mp3"></audio>
+            <div class="signature-amazing">Mit Liebe, für dich! 💖</div>
+        </div>
+    </div>
+    <script>
+    // Confetti animation using canvas
+    function launchAmazingConfetti() {
+        const canvas = document.getElementById('confettiCanvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        const confetti = [];
+        for (let i = 0; i < 120; i++) {
+            confetti.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * -canvas.height,
+                r: Math.random() * 8 + 6,
+                d: Math.random() * 80 + 40,
+                color: `hsl(${Math.random()*360}, 80%, 60%)`,
+                tilt: Math.random() * 10 - 10,
+                tiltAngle: 0,
+                tiltAngleIncremental: (Math.random() * 0.07) + 0.05
+            });
+        }
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            confetti.forEach(c => {
+                ctx.beginPath();
+                ctx.lineWidth = c.r;
+                ctx.strokeStyle = c.color;
+                ctx.moveTo(c.x + c.tilt + c.r/3, c.y);
+                ctx.lineTo(c.x + c.tilt, c.y + c.d/3);
+                ctx.stroke();
+            });
+            update();
+        }
+        function update() {
+            confetti.forEach(c => {
+                c.y += (Math.cos(c.d) + 3 + c.r/2) / 2;
+                c.x += Math.sin(0.01 * c.d);
+                c.tiltAngle += c.tiltAngleIncremental;
+                c.tilt = Math.sin(c.tiltAngle) * 15;
+                if (c.y > canvas.height) {
+                    c.x = Math.random() * canvas.width;
+                    c.y = -10;
+                }
+            });
+        }
+        function animate() {
+            draw();
+            requestAnimationFrame(animate);
+        }
+        animate();
+    }
+    // Typewriter effect
+    function typeWriter(element, text, speed = 45) {
+        let i = 0;
+        element.textContent = '';
+        function typing() {
+            if (i < text.length) {
+                element.textContent += text.charAt(i);
+                i++;
+                setTimeout(typing, speed);
+            }
+        }
+        typing();
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+        const message = "Heute ist dein Tag! Möge dein Herz vor Freude hüpfen, deine Wünsche in Erfüllung gehen und dein Lächeln die Welt verzaubern. Happy Birthday! 🥳✨";
+        typeWriter(document.getElementById('amazingMessage'), message, 32);
+        setTimeout(launchAmazingConfetti, 800);
+        document.getElementById('playSong').addEventListener('click', function() {
+            const audio = document.getElementById('birthdayAudio');
+            audio.currentTime = 0;
+            audio.play();
+        });
+    });
+    </script>
+</body>
+</html>
