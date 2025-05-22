@@ -3,44 +3,97 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Geburtstagsüberraschung! 🎉</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+    <title>🎉 Geburtstagszauber 🎉</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         body {
             margin: 0;
             padding: 0;
             min-height: 100vh;
+            width: 100vw;
+            overflow: hidden;
             background: linear-gradient(120deg, #f6d365 0%, #fda085 100%);
-            font-family: 'Poppins', sans-serif;
-            overflow-x: hidden;
-        }
-        .center-wrap {
-            min-height: 100vh;
+            font-family: 'Montserrat', sans-serif;
             display: flex;
-            flex-direction: column;
-            justify-content: center;
             align-items: center;
+            justify-content: center;
         }
-        .glass-card {
-            background: rgba(255,255,255,0.85);
-            border-radius: 32px;
-            box-shadow: 0 8px 48px 0 rgba(246,211,101,0.18), 0 2px 0 #fff;
-            padding: 56px 32px 36px 32px;
-            max-width: 420px;
-            width: 92vw;
-            text-align: center;
-            margin: 0 auto;
-            border: 2.5px solid #fffbe9;
+        .bg-balloons {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: 1;
+            pointer-events: none;
+        }
+        .balloon-float {
+            position: absolute;
+            width: 80px; height: 110px;
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            opacity: 0.85;
+            animation: floatBalloon 12s linear infinite;
+        }
+        .balloon-float:nth-child(1) { left: 10vw; bottom: -120px; background: radial-gradient(circle at 30% 30%, #fff 10%, #a1c4fd 60%, #fbc2eb 100%); animation-delay: 0s; }
+        .balloon-float:nth-child(2) { left: 30vw; bottom: -140px; background: radial-gradient(circle at 30% 30%, #fff 10%, #fcb69f 60%, #fdcbf1 100%); animation-delay: 2s; }
+        .balloon-float:nth-child(3) { left: 60vw; bottom: -100px; background: radial-gradient(circle at 30% 30%, #fff 10%, #fdcbf1 60%, #a1c4fd 100%); animation-delay: 4s; }
+        .balloon-float:nth-child(4) { left: 80vw; bottom: -130px; background: radial-gradient(circle at 30% 30%, #fff 10%, #fbc2eb 60%, #fcb69f 100%); animation-delay: 6s; }
+        @keyframes floatBalloon {
+            0% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-60vh) scale(1.05); }
+            100% { transform: translateY(-120vh) scale(1); }
+        }
+        .confetti-canvas {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            pointer-events: none;
+            z-index: 10;
+        }
+        .center-card {
             position: relative;
-            overflow: visible;
+            z-index: 20;
+            background: rgba(255,255,255,0.25);
+            box-shadow: 0 8px 64px 0 rgba(246,211,101,0.18), 0 2px 0 #fff;
+            border-radius: 40px;
+            padding: 56px 36px 44px 36px;
+            max-width: 420px;
+            width: 98vw;
+            text-align: center;
+            backdrop-filter: blur(16px) saturate(1.3);
+            border: 1.5px solid rgba(255,255,255,0.25);
             animation: popIn 1.2s cubic-bezier(.68,-0.55,.27,1.55);
         }
         @keyframes popIn {
             0% { transform: scale(0.7); opacity: 0; }
             100% { transform: scale(1); opacity: 1; }
         }
+        .cake-3d {
+            font-size: 5.5rem;
+            margin-bottom: 18px;
+            filter: drop-shadow(0 0 32px #f6d365);
+            animation: cakeBounce 1.2s infinite alternate, cakeGlow 2.2s infinite alternate;
+            position: relative;
+        }
+        .cake-3d::after {
+            content: '🕯️';
+            position: absolute;
+            left: 50%;
+            top: -38px;
+            transform: translateX(-50%);
+            font-size: 2.5rem;
+            animation: candleFlicker 1.2s infinite alternate;
+        }
+        @keyframes cakeBounce {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-18px); }
+        }
+        @keyframes cakeGlow {
+            0% { filter: drop-shadow(0 0 32px #f6d365); }
+            100% { filter: drop-shadow(0 0 48px #fdcbf1); }
+        }
+        @keyframes candleFlicker {
+            0% { opacity: 0.7; transform: translateX(-50%) scale(1) rotate(-5deg); }
+            100% { opacity: 1; transform: translateX(-50%) scale(1.1) rotate(5deg); }
+        }
         .amazing-title {
-            font-size: 2.8rem;
+            font-size: 2.7rem;
             font-weight: 900;
             background: linear-gradient(90deg, #e17055 0%, #f6d365 100%);
             background-clip: text;
@@ -50,55 +103,21 @@
             text-shadow: 0 2px 12px #f6d365, 0 1px 0 #fff;
             margin-bottom: 18px;
             letter-spacing: 2.5px;
-            animation: glow 2.5s infinite alternate;
+            animation: amazingGlow 2.5s infinite alternate;
         }
-        @keyframes glow {
+        @keyframes amazingGlow {
             0% { text-shadow: 0 2px 12px #f6d365, 0 1px 0 #fff; }
             100% { text-shadow: 0 8px 32px #e17055, 0 2px 4px #fff; }
         }
-        .balloon-float {
-            position: absolute;
-            left: 50%;
-            top: -80px;
-            transform: translateX(-50%);
-            width: 80px;
-            height: 120px;
-            z-index: 2;
-            animation: floatBalloon 4s ease-in-out infinite alternate;
-        }
-        .balloon-float img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-        }
-        @keyframes floatBalloon {
-            0% { transform: translateX(-50%) translateY(0); }
-            100% { transform: translateX(-50%) translateY(-40px); }
-        }
-        .cake-emoji-big {
-            font-size: 5rem;
-            margin-bottom: 18px;
-            animation: bounce 1.2s infinite alternate, cakeGlow 2.2s infinite alternate;
-            filter: drop-shadow(0 0 32px #f6d365);
-            position: relative;
-        }
-        @keyframes bounce {
-            0% { transform: translateY(0); }
-            100% { transform: translateY(-20px); }
-        }
-        @keyframes cakeGlow {
-            0% { filter: drop-shadow(0 0 32px #f6d365); }
-            100% { filter: drop-shadow(0 0 48px #fdcbf1); }
-        }
-        .amazing-message {
-            font-size: 1.5rem;
+        .typewriter-message {
+            font-size: 1.25rem;
             color: #e17055;
             min-height: 54px;
             margin-bottom: 24px;
             letter-spacing: 0.4px;
             background: linear-gradient(90deg, #fffbe9 60%, #f6d365 100%);
             border-radius: 30px;
-            padding: 28px 22px;
+            padding: 22px 18px;
             box-shadow: 0 2px 24px rgba(246,211,101,0.13);
             border: 0;
         }
@@ -107,8 +126,8 @@
             color: #fff;
             border: none;
             border-radius: 30px;
-            padding: 16px 40px;
-            font-size: 1.18rem;
+            padding: 18px 48px;
+            font-size: 1.25rem;
             font-weight: 700;
             cursor: pointer;
             box-shadow: 0 2px 8px rgba(246,211,101,0.13);
@@ -121,87 +140,56 @@
             color: #e17055;
             transform: scale(1.07);
         }
-        .signature-amazing {
-            font-family: 'Poppins', cursive, sans-serif;
-            font-size: 1.25rem;
+        .signature {
+            font-family: 'Montserrat', cursive, sans-serif;
+            font-size: 1.18rem;
             color: #e17055;
             margin-top: 32px;
             opacity: 0.9;
             letter-spacing: 1.3px;
         }
-        .confetti-canvas {
-            position: fixed;
-            left: 0; top: 0; width: 100vw; height: 100vh;
-            pointer-events: none;
-            z-index: 1000;
+        .surprise-img {
+            display: none;
+            margin: 32px auto 0 auto;
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 6px double #a1c4fd;
+            box-shadow: 0 2px 16px rgba(161,196,253,0.18);
+            animation: fadeInPhoto 1.2s;
+        }
+        @keyframes fadeInPhoto {
+            from { opacity: 0; transform: scale(0.7); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        @media (max-width: 600px) {
+            .center-card { padding: 12px 2vw 10px 2vw; }
+            .amazing-title { font-size: 1.3rem; }
+            .cake-3d { font-size: 2.2rem; }
         }
     </style>
 </head>
 <body>
+    <div class="bg-balloons">
+        <div class="balloon-float"></div>
+        <div class="balloon-float"></div>
+        <div class="balloon-float"></div>
+        <div class="balloon-float"></div>
+    </div>
     <canvas class="confetti-canvas" id="confettiCanvas"></canvas>
-    <div class="center-wrap">
-        <div class="glass-card">
-            <div class="balloon-float"><img src="https://cdn.pixabay.com/photo/2013/07/12/13/57/balloon-147622_1280.png" alt="Balloon"></div>
-            <div class="amazing-title">Das ist <span style="color:#f6d365;">AMAZING!</span></div>
-            <div class="cake-emoji-big">🎂</div>
-            <div class="amazing-message" id="amazingMessage"></div>
-            <button class="amazing-btn" id="playSong">Lass uns feiern! 🎵</button>
-            <audio id="birthdayAudio" src="https://cdn.pixabay.com/audio/2022/07/26/audio_124bfae5b2.mp3"></audio>
-            <div class="signature-amazing">Mit Liebe, für dich! 💖</div>
-        </div>
+    <div class="center-card">
+        <div class="amazing-title">Herzlichen Glückwunsch! 🎉</div>
+        <div class="cake-3d">🎂</div>
+        <div class="typewriter-message" id="typewriter"></div>
+        <button class="amazing-btn" id="startParty">Feier starten!</button>
+        <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=facearea&w=400&h=400&facepad=2" alt="Überraschung" class="surprise-img" id="surpriseImg">
+        <div class="signature">Mit ganz viel Liebe, von deinem Freund 💖</div>
+        <audio id="birthdayAudio" src="https://cdn.pixabay.com/audio/2022/07/26/audio_124bfae5b2.mp3"></audio>
     </div>
     <script>
-    // Confetti animation using canvas
-    function launchAmazingConfetti() {
-        const canvas = document.getElementById('confettiCanvas');
-        const ctx = canvas.getContext('2d');
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-        const confetti = [];
-        for (let i = 0; i < 120; i++) {
-            confetti.push({
-                x: Math.random() * canvas.width,
-                y: Math.random() * -canvas.height,
-                r: Math.random() * 8 + 6,
-                d: Math.random() * 80 + 40,
-                color: `hsl(${Math.random()*360}, 80%, 60%)`,
-                tilt: Math.random() * 10 - 10,
-                tiltAngle: 0,
-                tiltAngleIncremental: (Math.random() * 0.07) + 0.05
-            });
-        }
-        function draw() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            confetti.forEach(c => {
-                ctx.beginPath();
-                ctx.lineWidth = c.r;
-                ctx.strokeStyle = c.color;
-                ctx.moveTo(c.x + c.tilt + c.r/3, c.y);
-                ctx.lineTo(c.x + c.tilt, c.y + c.d/3);
-                ctx.stroke();
-            });
-            update();
-        }
-        function update() {
-            confetti.forEach(c => {
-                c.y += (Math.cos(c.d) + 3 + c.r/2) / 2;
-                c.x += Math.sin(0.01 * c.d);
-                c.tiltAngle += c.tiltAngleIncremental;
-                c.tilt = Math.sin(c.tiltAngle) * 15;
-                if (c.y > canvas.height) {
-                    c.x = Math.random() * canvas.width;
-                    c.y = -10;
-                }
-            });
-        }
-        function animate() {
-            draw();
-            requestAnimationFrame(animate);
-        }
-        animate();
-    }
     // Typewriter effect
-    function typeWriter(element, text, speed = 45) {
+    function typeWriter(element, text, speed = 45, cb) {
         let i = 0;
         element.textContent = '';
         function typing() {
@@ -209,18 +197,108 @@
                 element.textContent += text.charAt(i);
                 i++;
                 setTimeout(typing, speed);
+            } else if (cb) {
+                cb();
             }
         }
         typing();
     }
+    // Confetti animation (canvas)
+    const confettiColors = ['#f6d365','#fda085','#fdcbf1','#a1c4fd','#fcb69f','#ffe29f'];
+    function ConfettiParticle(canvasWidth, canvasHeight) {
+        this.x = Math.random() * canvasWidth;
+        this.y = Math.random() * -canvasHeight;
+        this.size = Math.random() * 10 + 8;
+        this.color = confettiColors[Math.floor(Math.random()*confettiColors.length)];
+        this.speed = Math.random() * 2 + 1.5;
+        this.angle = Math.random() * 2 * Math.PI;
+        this.spin = (Math.random() - 0.5) * 0.2;
+    }
+    ConfettiParticle.prototype.update = function(canvasWidth, canvasHeight) {
+        this.y += this.speed;
+        this.angle += this.spin;
+        if (this.y > canvasHeight + 20) {
+            this.y = Math.random() * -40;
+            this.x = Math.random() * canvasWidth;
+        }
+    };
+    ConfettiParticle.prototype.draw = function(ctx) {
+        ctx.save();
+        ctx.translate(this.x, this.y);
+        ctx.rotate(this.angle);
+        ctx.fillStyle = this.color;
+        ctx.fillRect(-this.size/2, -this.size/2, this.size, this.size*0.6);
+        ctx.restore();
+    };
+    function startConfetti() {
+        const canvas = document.getElementById('confettiCanvas');
+        const ctx = canvas.getContext('2d');
+        let W = window.innerWidth, H = window.innerHeight;
+        canvas.width = W; canvas.height = H;
+        let particles = [];
+        for (let i = 0; i < 80; i++) {
+            particles.push(new ConfettiParticle(W, H));
+        }
+        function animate() {
+            ctx.clearRect(0,0,W,H);
+            for (let p of particles) {
+                p.update(W, H);
+                p.draw(ctx);
+            }
+            requestAnimationFrame(animate);
+        }
+        animate();
+        window.addEventListener('resize', () => {
+            W = window.innerWidth; H = window.innerHeight;
+            canvas.width = W; canvas.height = H;
+        });
+    }
+    // Firework burst
+    function fireworkBurst() {
+        for (let i = 0; i < 12; i++) {
+            setTimeout(() => {
+                const firework = document.createElement('div');
+                firework.style.position = 'fixed';
+                firework.style.left = (window.innerWidth/2 + Math.cos(i/12*2*Math.PI)*90 + Math.random()*30-15) + 'px';
+                firework.style.top = (window.innerHeight/2 + Math.sin(i/12*2*Math.PI)*90 + Math.random()*30-15) + 'px';
+                firework.style.width = '18px';
+                firework.style.height = '18px';
+                firework.style.borderRadius = '50%';
+                firework.style.background = confettiColors[Math.floor(Math.random()*confettiColors.length)];
+                firework.style.zIndex = 9999;
+                firework.style.opacity = '0.95';
+                firework.style.pointerEvents = 'none';
+                firework.style.transition = 'opacity 1.2s';
+                document.body.appendChild(firework);
+                setTimeout(() => { firework.style.opacity = '0'; }, 800);
+                setTimeout(() => firework.remove(), 1400);
+            }, i*60);
+        }
+    }
+    // Show surprise image
+    function showSurpriseImg() {
+        const img = document.getElementById('surpriseImg');
+        img.style.display = 'block';
+        img.style.animation = 'fadeInPhoto 1.2s';
+    }
     document.addEventListener('DOMContentLoaded', function() {
-        const message = "Heute ist dein Tag! Möge dein Herz vor Freude hüpfen, deine Wünsche in Erfüllung gehen und dein Lächeln die Welt verzaubern. Happy Birthday! 🥳✨";
-        typeWriter(document.getElementById('amazingMessage'), message, 32);
-        setTimeout(launchAmazingConfetti, 800);
-        document.getElementById('playSong').addEventListener('click', function() {
+        const typewriter = document.getElementById('typewriter');
+        const message = "Ich wünsche dir einen Tag voller Lachen, Liebe und all deinen Lieblingsdingen. Möge dein kommendes Jahr mit Freude und Abenteuer funkeln! 🥳💖";
+        setTimeout(() => typeWriter(typewriter, message), 900);
+        // Start party button
+        document.getElementById('startParty').addEventListener('click', function() {
+            // Play song
             const audio = document.getElementById('birthdayAudio');
             audio.currentTime = 0;
             audio.play();
+            // Confetti
+            startConfetti();
+            // Firework
+            fireworkBurst();
+            // Show surprise image
+            setTimeout(showSurpriseImg, 1200);
+            // Button disappear
+            this.style.display = 'none';
         });
     });
     </script>
