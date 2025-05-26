@@ -59,12 +59,14 @@
             pointer-events: none;
             z-index: 0;
         }
+
         .heart-canvas {
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh;
             pointer-events: none;
             z-index: 5;
         }
+
         .center-card {
             position: relative;
             z-index: 20;
@@ -286,6 +288,7 @@
         });
     }
 
+
     function startHearts() {
         const canvas = document.getElementById('heartCanvas');
         const ctx = canvas.getContext('2d');
@@ -325,6 +328,7 @@
         animate();
         window.addEventListener('resize', () => { W=window.innerWidth; H=window.innerHeight; canvas.width=W; canvas.height=H; });
     }
+
     function startConfetti() {
         const canvas = document.getElementById('confettiCanvas');
         const ctx = canvas.getContext('2d');
@@ -380,7 +384,9 @@
         const typewriter = document.getElementById('typewriter');
         const message = "Ich wünsche dir einen Tag voller Lachen, Liebe und all deinen Lieblingsdingen. Möge dein kommendes Jahr mit Freude und Abenteuer funkeln! 🥳💖";
         startStars();
+
         startHearts();
+
         setTimeout(() => typeWriter(typewriter, message), 900);
         // Start party button
         document.getElementById('startParty').addEventListener('click', function() {
