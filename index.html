@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🎉 Geburtstagszauber 🎉</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Pacifico&display=swap" rel="stylesheet">
     <style>
         body {
             margin: 0;
@@ -12,11 +12,18 @@
             min-height: 100vh;
             width: 100vw;
             overflow: hidden;
-            background: linear-gradient(120deg, #f6d365 0%, #fda085 100%);
+            background: linear-gradient(-45deg, #f6d365, #fda085, #fdcbf1, #a1c4fd);
+            background-size: 400% 400%;
+            animation: gradientShift 16s ease infinite;
             font-family: 'Montserrat', sans-serif;
             display: flex;
             align-items: center;
             justify-content: center;
+        }
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
         .bg-balloons {
             position: fixed;
@@ -46,11 +53,23 @@
             pointer-events: none;
             z-index: 10;
         }
+        .star-canvas {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .heart-canvas {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            pointer-events: none;
+            z-index: 5;
+        }
         .center-card {
             position: relative;
             z-index: 20;
             background: rgba(255,255,255,0.25);
-            box-shadow: 0 8px 64px 0 rgba(246,211,101,0.18), 0 2px 0 #fff;
+            box-shadow: 0 8px 64px rgba(246,211,101,0.18), 0 12px 48px rgba(253,203,241,0.25), 0 2px 0 #fff;
             border-radius: 40px;
             padding: 56px 36px 44px 36px;
             max-width: 420px;
@@ -141,7 +160,7 @@
             transform: scale(1.07);
         }
         .signature {
-            font-family: 'Montserrat', cursive, sans-serif;
+            font-family: 'Pacifico', cursive, 'Montserrat', sans-serif;
             font-size: 1.18rem;
             color: #e17055;
             margin-top: 32px;
@@ -177,7 +196,9 @@
         <div class="balloon-float"></div>
         <div class="balloon-float"></div>
     </div>
+    <canvas class="star-canvas" id="starCanvas"></canvas>
     <canvas class="confetti-canvas" id="confettiCanvas"></canvas>
+    <canvas class="heart-canvas" id="heartCanvas"></canvas>
     <div class="center-card">
         <div class="amazing-title">Herzlichen Glückwunsch! 🎉</div>
         <div class="cake-3d">🎂</div>
@@ -230,6 +251,80 @@
         ctx.fillRect(-this.size/2, -this.size/2, this.size, this.size*0.6);
         ctx.restore();
     };
+
+    function startStars() {
+        const canvas = document.getElementById('starCanvas');
+        const ctx = canvas.getContext('2d');
+        let W = window.innerWidth, H = window.innerHeight;
+        canvas.width = W; canvas.height = H;
+        let stars = [];
+        for (let i = 0; i < 60; i++) {
+            stars.push({
+                x: Math.random() * W,
+                y: Math.random() * H,
+                size: Math.random() * 2 + 1,
+                alpha: Math.random() * 0.5 + 0.3,
+                twinkle: Math.random() * 0.02 + 0.005
+            });
+        }
+        function animate() {
+            ctx.clearRect(0,0,W,H);
+            for (let s of stars) {
+                ctx.fillStyle = `rgba(255,255,255,${s.alpha})`;
+                ctx.beginPath();
+                ctx.arc(s.x, s.y, s.size, 0, Math.PI*2);
+                ctx.fill();
+                s.alpha += s.twinkle;
+                if (s.alpha > 1 || s.alpha < 0.3) s.twinkle *= -1;
+            }
+            requestAnimationFrame(animate);
+        }
+        animate();
+        window.addEventListener('resize', () => {
+            W = window.innerWidth; H = window.innerHeight;
+            canvas.width = W; canvas.height = H;
+        });
+    }
+
+    function startHearts() {
+        const canvas = document.getElementById('heartCanvas');
+        const ctx = canvas.getContext('2d');
+        let W = window.innerWidth, H = window.innerHeight;
+        canvas.width = W; canvas.height = H;
+        let hearts = [];
+        for (let i = 0; i < 30; i++) {
+            hearts.push({
+                x: Math.random() * W,
+                y: Math.random() * H,
+                size: Math.random() * 8 + 4,
+                speed: Math.random() * 0.5 + 0.5,
+                drift: Math.random() * 2 - 1,
+                alpha: Math.random() * 0.5 + 0.4
+            });
+        }
+        function drawHeart(x, y, size) {
+            ctx.beginPath();
+            ctx.moveTo(x, y + size / 4);
+            ctx.bezierCurveTo(x + size / 2, y - size / 2, x + size, y + size / 2, x, y + size);
+            ctx.bezierCurveTo(x - size, y + size / 2, x - size / 2, y - size / 2, x, y + size / 4);
+            ctx.closePath();
+        }
+        function animate() {
+            ctx.clearRect(0,0,W,H);
+            ctx.fillStyle = 'rgba(255,105,180,0.8)';
+            hearts.forEach(h => {
+                ctx.globalAlpha = h.alpha;
+                drawHeart(h.x, h.y, h.size);
+                ctx.fill();
+                h.y -= h.speed;
+                h.x += h.drift;
+                if (h.y < -20) { h.y = H + 20; h.x = Math.random() * W; }
+            });
+            requestAnimationFrame(animate);
+        }
+        animate();
+        window.addEventListener('resize', () => { W=window.innerWidth; H=window.innerHeight; canvas.width=W; canvas.height=H; });
+    }
     function startConfetti() {
         const canvas = document.getElementById('confettiCanvas');
         const ctx = canvas.getContext('2d');
@@ -284,6 +379,8 @@
     document.addEventListener('DOMContentLoaded', function() {
         const typewriter = document.getElementById('typewriter');
         const message = "Ich wünsche dir einen Tag voller Lachen, Liebe und all deinen Lieblingsdingen. Möge dein kommendes Jahr mit Freude und Abenteuer funkeln! 🥳💖";
+        startStars();
+        startHearts();
         setTimeout(() => typeWriter(typewriter, message), 900);
         // Start party button
         document.getElementById('startParty').addEventListener('click', function() {
