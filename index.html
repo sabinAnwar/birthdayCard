@@ -59,6 +59,14 @@
             pointer-events: none;
             z-index: 0;
         }
+
+        .heart-canvas {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            pointer-events: none;
+            z-index: 5;
+        }
+
         .center-card {
             position: relative;
             z-index: 20;
@@ -192,6 +200,7 @@
     </div>
     <canvas class="star-canvas" id="starCanvas"></canvas>
     <canvas class="confetti-canvas" id="confettiCanvas"></canvas>
+    <canvas class="heart-canvas" id="heartCanvas"></canvas>
     <div class="center-card">
         <div class="amazing-title">Herzlichen Glückwunsch! 🎉</div>
         <div class="cake-3d">🎂</div>
@@ -278,6 +287,48 @@
             canvas.width = W; canvas.height = H;
         });
     }
+
+
+    function startHearts() {
+        const canvas = document.getElementById('heartCanvas');
+        const ctx = canvas.getContext('2d');
+        let W = window.innerWidth, H = window.innerHeight;
+        canvas.width = W; canvas.height = H;
+        let hearts = [];
+        for (let i = 0; i < 30; i++) {
+            hearts.push({
+                x: Math.random() * W,
+                y: Math.random() * H,
+                size: Math.random() * 8 + 4,
+                speed: Math.random() * 0.5 + 0.5,
+                drift: Math.random() * 2 - 1,
+                alpha: Math.random() * 0.5 + 0.4
+            });
+        }
+        function drawHeart(x, y, size) {
+            ctx.beginPath();
+            ctx.moveTo(x, y + size / 4);
+            ctx.bezierCurveTo(x + size / 2, y - size / 2, x + size, y + size / 2, x, y + size);
+            ctx.bezierCurveTo(x - size, y + size / 2, x - size / 2, y - size / 2, x, y + size / 4);
+            ctx.closePath();
+        }
+        function animate() {
+            ctx.clearRect(0,0,W,H);
+            ctx.fillStyle = 'rgba(255,105,180,0.8)';
+            hearts.forEach(h => {
+                ctx.globalAlpha = h.alpha;
+                drawHeart(h.x, h.y, h.size);
+                ctx.fill();
+                h.y -= h.speed;
+                h.x += h.drift;
+                if (h.y < -20) { h.y = H + 20; h.x = Math.random() * W; }
+            });
+            requestAnimationFrame(animate);
+        }
+        animate();
+        window.addEventListener('resize', () => { W=window.innerWidth; H=window.innerHeight; canvas.width=W; canvas.height=H; });
+    }
+
     function startConfetti() {
         const canvas = document.getElementById('confettiCanvas');
         const ctx = canvas.getContext('2d');
@@ -333,6 +384,9 @@
         const typewriter = document.getElementById('typewriter');
         const message = "Ich wünsche dir einen Tag voller Lachen, Liebe und all deinen Lieblingsdingen. Möge dein kommendes Jahr mit Freude und Abenteuer funkeln! 🥳💖";
         startStars();
+
+        startHearts();
+
         setTimeout(() => typeWriter(typewriter, message), 900);
         // Start party button
         document.getElementById('startParty').addEventListener('click', function() {
